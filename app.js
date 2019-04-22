@@ -155,7 +155,6 @@ function endGame(){
         changePlayer(activatePlayer);
     }
 };
-document.querySelector(".modal-bg").style.display = "flex";
 isFlashingDado(true);
 
 document.querySelector('.btn-roll').addEventListener('click', function( ) {
