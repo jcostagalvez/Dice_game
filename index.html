@@ -2,6 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/css?family=Lato:100,300,600" rel="stylesheet" type="text/css"> 
+        <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
         <link type="text/css" rel="stylesheet" href="style.css">
         
         <title>Pig Game</title>
@@ -10,35 +12,57 @@
     <body>
         <div class="wrapper clearfix">
             <div class="panel-player-0 active">
-                <div class="player-name" id="name-0">Player 1</div>
+                <div class="player-name" id="name-0">Jugador 1 </div>
                 <div class="player-score" id="score-0">0</div>
                 <div class="player-current-box">
-                    <div class="player-current-label">Current</div>
+                    <div class="player-current-label">Puntuación actual</div>
                     <div class="player-current-score" id="current-0">0</div>
                 </div>
             </div>
             
             <div class="panel-player-1">
-                <div class="player-name" id="name-1">Player 2</div>
+                <div class="player-name" id="name-1">Jugador 2 </div>
                 <div class="player-score" id="score-1">0</div>
                 <div class="player-current-box">
-                    <div class="player-current-label">Current</div>
+                    <div class="player-current-label">Puntuación actual</div>
                     <div class="player-current-score" id="current-1">0</div>
                 </div>
             </div>
             
             <div id="buttonsNewPlay">
-                <button  class="btn-new"><i class="ion-ios-plus-outline"></i>New game</button>
+                <button  class="btn-new"><i class="ion-ios-plus-outline"></i>Nuevo juego</button>
             </div>
             
             <div id="buttonsPlay">
-                <button class="btn-roll"><i class="ion-ios-loop"></i>Roll dice</button>
-                <button class="btn-hold"><i class="ion-ios-download-outline"></i>Hold</button>
+                <button class="btn-roll"><i class="ion-ios-loop"></i>Tirada</button>
+                <button class="btn-hold"><i class="ion-ios-download-outline"></i>Guardar</button>
             </div>
             
             <img id = "dado" src="dice-5.png" alt="Dice" class="dice">
         </div>
-        
+                            <!-- Modal secction, triaying  -->
+
+        <div class="modal-bg">
+                <div class="modal-content">
+                    <form>
+                        <p class="form-text-title">Reglas del Roll and Roll</p>
+                        <p class="form-text">La reglas del juego son muy sencillas:</p>
+                        <p class="form-text">lo primero que debes hacer es rellenar los nombres de los dos jugadores y la puntuación maxima para que un jugador gane el juego</p>
+                        <p class="form-text">Una vez empiece el juego se debe pullsar el botón tirar para realizar la tirada del dado, cada vez que pulses el botón se ira aumentando la puntuacion actual y al pulsar el botón guardar, dicha puntuación se guardara en la puntaucion total, salvo dos excepciones:</p>
+                        <p class="form-text">1) Se obtiene un 1: la puntuacion actual se borra y se cambia el turno del tirador</p>                     
+                        <p class="form-text"> 2) Se obtiene un doble 6: se elimina la puntuacion actual, la total se devuelve a cero y se reañiza un cambio de jugador</p>                   
+                        <br>
+                        <p class="form-text"> Nombre del primer jugador</p>
+                        <input id="jugador1" type="text" placeholder="Introduce un nombre">
+                        <p class="form-text"> Nombre del segundo jugador</p>
+                        <input id="jugador2" type="text" placeholder="Introduce un nombre">
+                        <p class="form-text"> Puntuación maxima del juego</p>
+                        <input id="puntuacionmax" type="text" placeholder="Introduce una puntuación">
+                        <br>
+                    </form>
+                    <button  class="btn-next">Continuar y jugar</button>
+                </div>
+            </div>
         <script src="app.js"></script>
-    </body>
+    </body>    
 </html>

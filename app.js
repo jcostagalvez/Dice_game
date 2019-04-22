@@ -10,14 +10,17 @@ GAME RULES:
 */
 
 let roundScore, activatePlayer;
-
+let diceAction = [];
 const player1 = new player(0, 0);
 const player2 = new player(1, 0);
 let gamePlaying = true;
 roundScore = 0;
 activatePlayer = 0;
+let maxScore = 0;
+let antepnultimateDiceValue = 0;
+const dado = document.getElementById('dado');
 
-const  htmlId= {
+const  htmlId = {
     score : "#score-",
     current : "#current-",
     panel : ".panel-player-",
@@ -25,6 +28,12 @@ const  htmlId= {
     buttonsdiv : "#buttonsPlay",
     buttonsNewPlay : "buttonsNewPlay"
 };
+const  modalHtmlId = {
+    jugador1 :"#jugador1",
+    jugador2 :"#jugador2",
+    puntuacionmax :"#puntuacionmax",
+    bgmodal:".bg-modal",
+}
 
 function player (indicador, score,nombre) {
     this.indicador = indicador;
@@ -49,14 +58,24 @@ function changeTextContent(scoretype, player, text){
     document.querySelector(scoretype + player).textContent = text
 };
 
-const dado = document.getElementById('dado');
+function imformationTramision(){
+    maxScore = selectElement(modalHtmlId.puntuacionmax).value;
+    player1.nombre = selectElement(modalHtmlId.jugador1).value;
+    player2.nombre = selectElement(modalHtmlId.jugador2).value;
+    changeTextContent(htmlId.namePlayer, player1.indicador, player1.nombre); 
+    changeTextContent(htmlId.namePlayer, player2.indicador, player2.nombre);
+    selectElement(modalHtmlId.puntuacionmax).value = "";
+    selectElement(modalHtmlId.jugador1).value = "";
+    selectElement(modalHtmlId.jugador2).value = "";
+    selectElement(".modal-bg").style.display = 'none'
+}
+
 function newGame(){
+    document.querySelector(".modal-bg").style.display = "flex";
     gamePlaying = true;
     activatePlayer = 0;
     roundScore = 0;
 
-    player1.nombre = 'Player 1' ;
-    player2.nombre = 'Player 2';
     player1.score = 0;
     player2.score = 0;
    
@@ -65,9 +84,6 @@ function newGame(){
         changeTextContent(htmlId.current, element, 0);
 
     });
-
-    changeTextContent(htmlId.namePlayer, player1.indicador, player1.nombre); 
-    changeTextContent(htmlId.namePlayer, player2.indicador, player2.nombre);
     activateButtons();
 };
 
@@ -86,11 +102,9 @@ function isFlashingDado(choice) {
     }
 };
 
-
-
-
 function changePlayer(){
     roundScore = 0;
+    diceAction = [];
     changeTextContent(htmlId.current, activatePlayer, 0);
     document.querySelector('.panel-player-' + activatePlayer).classList.toggle('active');
     changeTextContent(htmlId.current, activatePlayer, 0);
@@ -98,22 +112,42 @@ function changePlayer(){
     document.querySelector('.panel-player-' + activatePlayer).classList.toggle('active');
 };
 
+function sumScore(score){
+    if(score === 0){
+        return score;
+    }else{
+        whoIsPlaying() === true ? scores = player1.score += score: scores = player2.score += score;
+        return scores;
+    }
+}
+
+function displayScore(score){
+
+    if(whoIsPlaying() === true){
+        player1.score = sumScore(score);
+        document.querySelector('#score-' + activatePlayer).textContent = player1.score;
+    } else{
+        player2.score = sumScore(score);
+        document.querySelector('#score-' + activatePlayer).textContent = player2.score;
+    }   
+
+}
 function endGameActions(){
 
     if(whoIsPlaying() === true){
-        changeTextContent(htmlId.namePlayer, player1.indicador, 'WINNER'); 
-        changeTextContent(htmlId.namePlayer, player2.indicador, 'LOOSER');
+        changeTextContent(htmlId.namePlayer, player1.indicador, 'GANADOR'); 
+        changeTextContent(htmlId.namePlayer, player2.indicador, 'PERDEDOR');
         changeTextContent(htmlId.current, player1.indicador, 0); 
     }else{
-        changeTextContent(htmlId.namePlayer, player2.indicador, 'WINNER'); 
-        changeTextContent(htmlId.namePlayer, player1.indicador, 'LOOSER');
+        changeTextContent(htmlId.namePlayer, player2.indicador, 'GANADOR'); 
+        changeTextContent(htmlId.namePlayer, player1.indicador, 'PERDEDOR');
         changeTextContent(htmlId.current, player1.indicador, 0); 
      }
     };
 
 function endGame(){
     gamePlaying = false;
-    if( player1.score >= 10 || player2.score >= 10){
+    if( player1.score >= maxScore || player2.score >= maxScore){
             endGameActions();
             isFlashingDado(true);
             activateButtons();
@@ -121,39 +155,38 @@ function endGame(){
         changePlayer(activatePlayer);
     }
 };
-
+document.querySelector(".modal-bg").style.display = "flex";
 isFlashingDado(true);
 
 document.querySelector('.btn-roll').addEventListener('click', function( ) {
     isFlashingDado(false);   
     let dice = Math.floor(Math.random() * 6) + 1; 
+    //diceAction.push(dice);
+    //let antepnultimateDiceValue = diceAction[diceAction.length - 2];
+
     const diceDom = document.querySelector('.dice');
     diceDom.style.display = 'block';
     diceDom.src = 'dice-' + dice + '.png';
-if(dice !== 1){
+
+    if(dice === 6 && antepnultimateDiceValue === 6){
+        displayScore(0);
+        isFlashingDado(true);
+        changePlayer(activatePlayer);
+    }else if(dice !== 1 ){
     roundScore += dice;
     changeTextContent(htmlId.current, activatePlayer, roundScore);
-}else{
-
+    }else{
     isFlashingDado(true);
     changePlayer(activatePlayer);
-} 
-    
+}
+antepnultimateDiceValue = dice; 
 });
 
 document.querySelector('.btn-hold').addEventListener('click', function(){
-
-console.log(whoIsPlaying()===true);
-
-    if(whoIsPlaying() === true){
-        player1.score += roundScore;
-        document.querySelector('#score-' + activatePlayer).textContent = player1.score;
-    } else{
-        player2.score += roundScore;
-        document.querySelector('#score-' + activatePlayer).textContent = player2.score;
-    }   
-
+    displayScore(roundScore);
     endGame();
 });
 
 document.querySelector('.btn-new').addEventListener('click', newGame);
+
+document.querySelector('.btn-next').addEventListener('click', imformationTramision);
