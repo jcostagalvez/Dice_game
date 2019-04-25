@@ -141,7 +141,7 @@ function endGameActions(){
     }else{
         changeTextContent(htmlId.namePlayer, player2.indicador, 'GANADOR'); 
         changeTextContent(htmlId.namePlayer, player1.indicador, 'PERDEDOR');
-        changeTextContent(htmlId.current, player1.indicador, 0); 
+        changeTextContent(htmlId.current, player2.indicador, 0);
      }
     };
 
